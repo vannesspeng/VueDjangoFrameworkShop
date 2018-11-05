@@ -4,10 +4,12 @@ from django.contrib.auth.models import AbstractUser#2、然后import第三方包
 from django.db import models                       #3、最后导入项目自身模块的包
 
 
+
 class UserProfile(AbstractUser):
     """
     用户实体
     """
+
     name = models.CharField(max_length=30, null=True, blank=True, verbose_name="姓名")
     birthday = models.DateField(null=True, blank=True, verbose_name="出生年月")
     gender = models.CharField(max_length=6, choices=(("male", u"男"), ("female", "女")), default="female",
@@ -19,6 +21,7 @@ class UserProfile(AbstractUser):
         verbose_name = "用户"
         # model的复数形式
         verbose_name_plural = verbose_name
+        app_label = 'users'
 
     def __str__(self):
         return self.name
