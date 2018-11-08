@@ -24,7 +24,7 @@ class UserProfile(AbstractUser):
         app_label = 'users'
 
     def __str__(self):
-        return self.name
+        return self.username
 
 
 class VerifyCode(models.Model):
