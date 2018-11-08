@@ -48,7 +48,7 @@ class GoodsListViewSet(mixins.ListModelMixin ,GenericViewSet):
     #     return self.queryset
 
 
-class CategorysListViewSet(mixins.ListModelMixin, GenericViewSet):
+class CategorysListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
     queryset = GoodsCategory.objects.filter(category_type=1)
     serializer_class = CategorySerializer
 
