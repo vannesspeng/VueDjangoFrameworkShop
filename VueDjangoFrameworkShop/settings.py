@@ -14,6 +14,8 @@ import os
 import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from datetime import datetime, timedelta
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
@@ -25,11 +27,16 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'hcex(lnj+*me_ttw7gtnbtt79x@qq)$)5$k8^ah378*b6a8z72'
-
+API_KEY = '37a35942325be7af542ca05b22aa16ab'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+# 设置邮箱和用户名和手机号均可登录
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
 
 
 # Application definition
@@ -136,15 +143,34 @@ USE_L10N = True
 
 USE_TZ = False
 
-#设置上传文件路径，图片访问路径
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+#设置上传文件路径，图片访问路径
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 #     'PAGE_SIZE': 10,
 # }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+
+
+# 与drf的jwt相关的设置
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': timedelta(seconds=3600),
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+}
+
+# 手机号码正则表达式
+REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"

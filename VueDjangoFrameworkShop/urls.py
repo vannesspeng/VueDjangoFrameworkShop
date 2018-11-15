@@ -24,9 +24,17 @@ from goods.views import GoodsListViewSet, CategorysListViewSet
 from settings import MEDIA_ROOT
 
 from rest_framework.routers import DefaultRouter
+from rest_framework_jwt.views import obtain_jwt_token
+
+from users.views import SmsCodeViewSet, UserViewSet, HotSearchsViewset
+
 router = DefaultRouter()
 router.register('goods', GoodsListViewSet, base_name='goods')
 router.register('categorys', CategorysListViewSet, base_name='categorys')
+router.register('code', SmsCodeViewSet, base_name='code')
+router.register('users', UserViewSet, base_name='users')
+# 热搜词
+router.register('hotsearchs', HotSearchsViewset, base_name="hotsearchs")
 
 # goods_list = GoodsListViewSet.as_view({
 #     'get': 'list'
@@ -41,4 +49,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('docs/', include_docs_urls(title="生鲜超市")),
     path('', include(router.urls)),
+    # drf自带的token授权登录,获取token需要向该地址post数据
+    path('login/', obtain_jwt_token),
 ]

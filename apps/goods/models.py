@@ -84,9 +84,8 @@ class GoodsImage(models.Model):
     """
     商品图片
     """
-    goods = models.ForeignKey(Goods, on_delete=models.CASCADE, verbose_name="商品")
+    goods = models.ForeignKey(Goods, on_delete=models.CASCADE, verbose_name="商品", related_name="images")
     image = models.ImageField(upload_to="", verbose_name="商品图片", null=True, blank=True)
-    image_url = models.CharField(max_length=300, null=True, blank=True, verbose_name="商品图片url")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     class Meta:
