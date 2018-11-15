@@ -213,7 +213,7 @@ def UploadFile(request):
     # 返回数据
     return_info = {
         # 保存后的文件名称
-        'url': urljoin(USettings.gSettings.MEDIA_URL, OutputPathFormat),
+        'url': request.scheme +'://'+ request.META['HTTP_HOST'] + urljoin(USettings.gSettings.MEDIA_URL, OutputPathFormat),
         # 原始文件名
         'original': upload_file_name,
         'type': upload_original_ext,
