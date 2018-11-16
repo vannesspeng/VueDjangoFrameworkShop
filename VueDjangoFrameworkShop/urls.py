@@ -26,6 +26,7 @@ from settings import MEDIA_ROOT
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token
 
+from user_operation.views import UserFavViewSet
 from users.views import SmsCodeViewSet, UserViewSet, HotSearchsViewset
 
 router = DefaultRouter()
@@ -36,6 +37,8 @@ router.register('users', UserViewSet, base_name='users')
 # 热搜词
 router.register('hotsearchs', HotSearchsViewset, base_name="hotsearchs")
 
+#用户收藏
+router.register('userfavs', UserFavViewSet, base_name='userfavs')
 # goods_list = GoodsListViewSet.as_view({
 #     'get': 'list'
 # })

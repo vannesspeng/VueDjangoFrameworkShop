@@ -159,7 +159,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
@@ -168,7 +167,7 @@ REST_FRAMEWORK = {
 
 # 与drf的jwt相关的设置
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': timedelta(seconds=3600),
+    'JWT_EXPIRATION_DELTA': timedelta(seconds=36000),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
 
