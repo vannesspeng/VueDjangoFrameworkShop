@@ -21,17 +21,20 @@ from utils.yunpian import Yunpian
 
 User = get_user_model()
 
+
 class CustomBackend(ModelBackend):
     """
     自定义用户验证函数
     """
+
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
-            user = UserProfile.objects.get(Q(username=username)|Q(mobile=username))
+            user = UserProfile.objects.get(Q(username=username) | Q(mobile=username))
             if user and user.check_password(password):
                 return user
         except Exception as e:
             return None
+
 
 class SmsCodeViewSet(CreateModelMixin, GenericViewSet):
     serializer_class = SmsSerializer
@@ -53,10 +56,10 @@ class SmsCodeViewSet(CreateModelMixin, GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        #1、创建随机的验证码
+        # 1、创建随机的验证码
         code = self.generate_code()
 
-        #2、使用云片接口发送验证码到指定的电话号码
+        # 2、使用云片接口发送验证码到指定的电话号码
         mobile = serializer.data['mobile']
         yun_pian = Yunpian(API_KEY)
         sms_status = yun_pian.send_sms(code, mobile)
@@ -74,11 +77,12 @@ class SmsCodeViewSet(CreateModelMixin, GenericViewSet):
 
 
 class UserViewSet(CreateModelMixin, GenericViewSet):
+    """
+    create:
+    创建一个新的用户实例.
+    """
     serializer_class = UserRegSerializer
     queryset = User.objects.all()
-    """
-    用户
-    """
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -100,13 +104,9 @@ class UserViewSet(CreateModelMixin, GenericViewSet):
         return serializer.save()
 
 
-
 class HotSearchsViewset(ListModelMixin, GenericViewSet):
     """
     获取热搜词列表
     """
     queryset = HotSearchWords.objects.all().order_by("-index")
     serializer_class = HotWordsSerializer
-
-
-

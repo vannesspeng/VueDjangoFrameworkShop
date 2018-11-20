@@ -9,8 +9,8 @@ from django_filters import rest_framework as filters
 
 
 class GoodsFilter(filters.FilterSet):
-    pricemin = filters.NumberFilter(field_name='shop_price', lookup_expr='gte')
-    pricemax = filters.NumberFilter(field_name='shop_price', lookup_expr='lte')
+    pricemin = filters.NumberFilter(field_name='shop_price', lookup_expr='gte', help_text="最低价格")
+    pricemax = filters.NumberFilter(field_name='shop_price', lookup_expr='lte', help_text="最高价格")
     top_category = filters.NumberFilter(name="category", method="top_category_filter")
 
     def top_category_filter(self, queryset, name, value):
