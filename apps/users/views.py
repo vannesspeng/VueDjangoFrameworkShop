@@ -3,20 +3,17 @@ from random import choice
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
-from django.shortcuts import render
-
-# Create your views here.
-from rest_framework import status
-from rest_framework.mixins import CreateModelMixin, ListModelMixin
+from rest_framework import status, authentication
+from rest_framework import mixins, viewsets
+from rest_framework import permissions
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework_jwt.serializers import jwt_payload_handler
 from rest_framework_jwt.utils import jwt_encode_handler
-
 from goods.models import HotSearchWords
 from settings import API_KEY
 from users.models import UserProfile, VerifyCode
-from users.serializers import SmsSerializer, UserRegSerializer, HotWordsSerializer
+from users.serializers import SmsSerializer, UserRegSerializer, HotWordsSerializer, UserDetailSerializer
 from utils.yunpian import Yunpian
 
 User = get_user_model()
@@ -36,7 +33,7 @@ class CustomBackend(ModelBackend):
             return None
 
 
-class SmsCodeViewSet(CreateModelMixin, GenericViewSet):
+class SmsCodeViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = SmsSerializer
     """
         Create a model instance.
@@ -76,13 +73,35 @@ class SmsCodeViewSet(CreateModelMixin, GenericViewSet):
             }, status=status.HTTP_201_CREATED)
 
 
-class UserViewSet(CreateModelMixin, GenericViewSet):
+class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
+                  viewsets.GenericViewSet):
     """
     create:
     创建一个新的用户实例.
     """
-    serializer_class = UserRegSerializer
+    # serializer_class = UserRegSerializer
     queryset = User.objects.all()
+    authentication_classes = (authentication.SessionAuthentication, JSONWebTokenAuthentication)
+
+    # permission_classes = (IsAuthenticated, )
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return UserDetailSerializer
+        elif self.action == 'create':
+            return UserRegSerializer
+
+        return UserDetailSerializer
+
+    def get_permissions(self):
+        """
+        获取权限
+        """
+        if self.action == 'retrieve':
+            return [permissions.IsAuthenticated(), ]
+        elif self.action == 'create':
+            return []
+        return []
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -100,11 +119,15 @@ class UserViewSet(CreateModelMixin, GenericViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(re_dict, status=status.HTTP_201_CREATED, headers=headers)
 
+    # 重写该方法，不管传什么id，都只返回当前用户
+    def get_object(self):
+        return self.request.user
+
     def perform_create(self, serializer):
         return serializer.save()
 
 
-class HotSearchsViewset(ListModelMixin, GenericViewSet):
+class HotSearchsViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     获取热搜词列表
     """

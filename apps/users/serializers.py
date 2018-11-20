@@ -40,6 +40,15 @@ class SmsSerializer(serializers.Serializer):
         return mobile
 
 
+class UserDetailSerializer(serializers.ModelSerializer):
+    """
+       用户详情序列化
+    """
+    class Meta:
+        model = User
+        fields = ("username", "gender", "birthday", "email", "mobile", "name")
+
+
 class UserRegSerializer(serializers.ModelSerializer):
     code = serializers.CharField(required=True, max_length=4, min_length=4,
                                  error_messages={
@@ -86,7 +95,6 @@ class UserRegSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("username", "code", "mobile", "password")
-
 
 
 class HotWordsSerializer(serializers.ModelSerializer):
