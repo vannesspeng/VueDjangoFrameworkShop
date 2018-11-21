@@ -26,7 +26,7 @@ from settings import MEDIA_ROOT
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token
 
-from trade.views import ShopcartViewset
+from trade.views import ShopcartViewset, OrderViewSet
 from user_operation.views import UserFavViewSet, LeavingMessageViewset, AddressViewset
 from users.views import SmsCodeViewSet, UserViewSet, HotSearchsViewset
 
@@ -46,6 +46,7 @@ router.register('messages', LeavingMessageViewset, base_name='messages')
 router.register('address', AddressViewset, base_name='address')
 #购物车
 router.register('shopcarts', ShopcartViewset, base_name='shopcarts')
+router.register('orders', OrderViewSet, base_name='orders')
 # goods_list = GoodsListViewSet.as_view({
 #     'get': 'list'
 # })
