@@ -21,7 +21,7 @@ from rest_framework.documentation import include_docs_urls
 
 import xadmin
 from goods.views import GoodsListViewSet, CategorysListViewSet
-from settings import MEDIA_ROOT
+from .settings import MEDIA_ROOT
 
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token

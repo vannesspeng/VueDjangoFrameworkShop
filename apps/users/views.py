@@ -11,7 +11,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework_jwt.serializers import jwt_payload_handler
 from rest_framework_jwt.utils import jwt_encode_handler
 from goods.models import HotSearchWords
-from settings import API_KEY
+from VueDjangoFrameworkShop.settings import API_KEY
 from users.models import UserProfile, VerifyCode
 from users.serializers import SmsSerializer, UserRegSerializer, HotWordsSerializer, UserDetailSerializer
 from utils.yunpian import Yunpian

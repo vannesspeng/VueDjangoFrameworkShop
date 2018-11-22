@@ -10,8 +10,8 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from goods.models import HotSearchWords
-from settings import REGEX_MOBILE
-from users.models import VerifyCode, UserProfile
+from VueDjangoFrameworkShop.settings import REGEX_MOBILE
+from users.models import VerifyCode
 
 User = get_user_model()
 
