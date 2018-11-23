@@ -15,6 +15,7 @@ Including another URLconf
 """
 # from django.contrib import admin
 from django.urls import path, include, re_path
+from django.views.generic import TemplateView
 from django.views.static import serve
 from rest_framework.documentation import include_docs_urls
 
@@ -26,7 +27,7 @@ from .settings import MEDIA_ROOT
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token
 
-from trade.views import ShopcartViewset, OrderViewSet
+from trade.views import ShopcartViewset, OrderViewSet, AlipayView
 from user_operation.views import UserFavViewSet, LeavingMessageViewset, AddressViewset
 from users.views import SmsCodeViewSet, UserViewSet, HotSearchsViewset
 
@@ -62,4 +63,7 @@ urlpatterns = [
     path('', include(router.urls)),
     # drf自带的token授权登录,获取token需要向该地址post数据
     path('login/', obtain_jwt_token),
+    # 支付宝支付相关接口
+    path('alipay/return/', AlipayView.as_view()),
+    path('index/', TemplateView.as_view(template_name='index.html'), name='index')
 ]

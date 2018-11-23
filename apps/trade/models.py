@@ -23,7 +23,7 @@ class ShoppingCart(models.Model):
         unique_together = ("user", "goods")
 
     def __str__(self):
-        return "%s(%d)".format(self.goods.name, self.goods_num)
+        return "%s(%d)".format(self.goods.name, self.nums)
 
 
 class OrderInfo(models.Model):
@@ -43,7 +43,7 @@ class OrderInfo(models.Model):
     order_sn = models.CharField(max_length=30, null=True, blank=True, verbose_name="订单号")
     # 第三方交易单号，与网站本身的单号相关联
     trade_no = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name="交易号")
-    pay_status = models.CharField(choices=ORDER_STATUS, default='paying', max_length=10, verbose_name="订单状态")
+    pay_status = models.CharField(choices=ORDER_STATUS, default='paying', max_length=30, verbose_name="订单状态")
     post_script = models.CharField(max_length=200, verbose_name="订单留言")
     order_mount = models.FloatField(default=0.0, verbose_name="订单金额")
     pay_time = models.DateTimeField(null=True, blank=True, verbose_name="支付时间")

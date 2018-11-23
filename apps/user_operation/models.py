@@ -47,7 +47,7 @@ class UserLeavingMessage(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return "%s留言：%s".format(self.user.name, self.message)
+        return self.subject
 
 class UserAddress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="用户")

@@ -151,7 +151,9 @@ STATIC_URL = '/static/'
 #设置上传文件路径，图片访问路径
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 # REST_FRAMEWORK = {
 #     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 #     'PAGE_SIZE': 10,
@@ -170,6 +172,11 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': timedelta(seconds=36000),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
+
+
+#支付宝字符相关
+private_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/private_2048.txt')
+ali_pub_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/alipay_key_2048.txt')
 
 # 手机号码正则表达式
 REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
