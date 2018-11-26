@@ -102,10 +102,10 @@ WSGI_APPLICATION = 'VueDjangoFrameworkShop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': "myshop",
+        'NAME': "vue_shop",
         'USER': "root",
         'PASSWORD': "root",
-        'HOST': "39.108.225.222 ",
+        'HOST': "127.0.0.1",
         'OPTIONS': { 'init_command': 'SET default_storage_engine=INNODB;' }
     }
 }

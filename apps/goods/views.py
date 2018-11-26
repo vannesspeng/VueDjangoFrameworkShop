@@ -10,8 +10,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import GenericViewSet
 
 from goods.filters import GoodsFilter
-from .serializer import GoodsSerializer, CategorySerializer
-from .models import Goods, GoodsCategory
+from .serializer import GoodsSerializer, CategorySerializer, BannerSerializer
+from .models import Goods, GoodsCategory, Banner
 
 
 class GoodsPagination(PageNumberPagination):
@@ -50,6 +50,15 @@ class GoodsListViewSet(ListModelMixin, RetrieveModelMixin ,GenericViewSet):
 class CategorysListViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = GoodsCategory.objects.filter(category_type=1)
     serializer_class = CategorySerializer
+
+
+class BannerViewSet(GenericViewSet, ListModelMixin):
+    """
+        获取轮播图列表
+        """
+    queryset = Banner.objects.all().order_by("index")
+    serializer_class = BannerSerializer
+
 
 
 

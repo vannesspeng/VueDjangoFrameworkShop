@@ -4,7 +4,7 @@
 # datetime:2018/11/6 15:28
 from rest_framework import serializers
 
-from goods.models import Goods, GoodsCategory, GoodsImage
+from goods.models import Goods, GoodsCategory, GoodsImage, Banner
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -44,4 +44,9 @@ class CategorySerializer(serializers.ModelSerializer):
     sub_cat = CategorySerializer2(many=True)
     class Meta:
         model = GoodsCategory
+        fields = "__all__"
+
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Banner
         fields = "__all__"
