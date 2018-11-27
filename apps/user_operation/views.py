@@ -5,6 +5,7 @@ from rest_framework import authentication
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework import viewsets
+from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from user_operation.models import UserFav, UserLeavingMessage, UserAddress
 from user_operation.serializers import UserFavSerializer, UserFavDetailSerializer, LeavingMessageSerializer, \
@@ -26,6 +27,13 @@ class UserFavViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Crea
             return UserFavSerializer
 
         return UserFavSerializer
+
+    # def perform_create(self, serializer):
+    #     instance = serializer.save()
+    #     goods = instance.goods
+    #     goods.fav_num += 1
+    #     goods.save()
+
 
     def get_queryset(self):
         return UserFav.objects.filter(user=self.request.user)

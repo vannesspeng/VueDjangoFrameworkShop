@@ -19,6 +19,28 @@ class ShopcartViewset(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly)
     lookup_field = 'goods_id'
 
+    def perform_create(self, serializer):
+        shop_cart = serializer.save()
+        goods = shop_cart.goods
+        goods.goods_num -= shop_cart.nums
+        goods.save()
+
+    def perform_destroy(self, instance):
+        goods = instance.goods
+        goods.goods_num +=  instance.nums
+        goods.save()
+        instance.delete()
+
+    def perform_update(self, serializer):
+        # 查找到保存之前的记录
+        existed_record = ShoppingCart.objects.get(id=serializer.instance.id)
+        existed_nums = existed_record.nums
+        save_record = serializer.save()
+        nums = existed_nums-save_record.nums
+        goods = save_record.goods
+        goods.goods_num += nums
+        goods.save()
+
     def get_queryset(self):
         return ShoppingCart.objects.filter(user=self.request.user)
 

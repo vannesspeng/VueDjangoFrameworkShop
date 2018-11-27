@@ -8,6 +8,7 @@ from rest_framework import  filters
 from rest_framework import mixins
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
+from rest_framework.response import Response
 
 from goods.filters import GoodsFilter
 from .serializer import GoodsSerializer, CategorySerializer, BannerSerializer, IndexCategorySerializer
@@ -40,6 +41,12 @@ class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
     search_fields = ['name', 'goods_brief', 'goods_desc']
     ordering_fields = ['sold_num', 'add_time', 'shop_price']
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.click_num += 1
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
     # 进行简单的过滤
     # def get_queryset(self):
