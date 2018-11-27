@@ -5,12 +5,12 @@ from django.views.generic.base import View
 # Create your views here.
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import  filters
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework import mixins
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.viewsets import GenericViewSet
+from rest_framework import viewsets
 
 from goods.filters import GoodsFilter
-from .serializer import GoodsSerializer, CategorySerializer, BannerSerializer
+from .serializer import GoodsSerializer, CategorySerializer, BannerSerializer, IndexCategorySerializer
 from .models import Goods, GoodsCategory, Banner
 
 
@@ -30,7 +30,7 @@ class GoodsPagination(PageNumberPagination):
 #     serializer_class = GoodsSerializer
 #     pagination_class = GoodsPagination
 
-class GoodsListViewSet(ListModelMixin, RetrieveModelMixin ,GenericViewSet):
+class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     # 商品列表页：分页、搜索、过滤、排序
     queryset = Goods.objects.all().order_by('id')
     serializer_class = GoodsSerializer
@@ -47,18 +47,21 @@ class GoodsListViewSet(ListModelMixin, RetrieveModelMixin ,GenericViewSet):
     #     return self.queryset
 
 
-class CategorysListViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
+class CategorysListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = GoodsCategory.objects.filter(category_type=1)
     serializer_class = CategorySerializer
 
 
-class BannerViewSet(GenericViewSet, ListModelMixin):
+class BannerViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     """
         获取轮播图列表
         """
     queryset = Banner.objects.all().order_by("index")
     serializer_class = BannerSerializer
 
+class IndexCategoryViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = GoodsCategory.objects.filter(is_tab=True, name__in=["生鲜食品", "酒水饮料"])
+    serializer_class = IndexCategorySerializer
 
 
 

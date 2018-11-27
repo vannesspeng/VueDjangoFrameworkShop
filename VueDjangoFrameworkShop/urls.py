@@ -21,7 +21,7 @@ from rest_framework.documentation import include_docs_urls
 
 
 import xadmin
-from goods.views import GoodsListViewSet, CategorysListViewSet, BannerViewSet
+from goods.views import GoodsListViewSet, CategorysListViewSet, BannerViewSet, IndexCategoryViewset
 from .settings import MEDIA_ROOT
 
 from rest_framework.routers import DefaultRouter
@@ -50,6 +50,8 @@ router.register('shopcarts', ShopcartViewset, base_name='shopcarts')
 router.register('orders', OrderViewSet, base_name='orders')
 # 轮播图
 router.register('banners', BannerViewSet, base_name='banners')
+# 首页商品
+router.register('indexgoods', IndexCategoryViewset, base_name='indexgoods')
 # goods_list = GoodsListViewSet.as_view({
 #     'get': 'list'
 # })
