@@ -1,14 +1,15 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 
-
 # Create your views here.
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import  filters
+from rest_framework import filters
 from rest_framework import mixins
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
 from goods.filters import GoodsFilter
 from .serializer import GoodsSerializer, CategorySerializer, BannerSerializer, IndexCategorySerializer
@@ -21,6 +22,7 @@ class GoodsPagination(PageNumberPagination):
     page_query_param = 'page'
     max_page_size = 100
 
+
 # class GoodsListView(ListAPIView):
 #     """
 #     通过django的view实现商品列表
@@ -31,15 +33,16 @@ class GoodsPagination(PageNumberPagination):
 #     serializer_class = GoodsSerializer
 #     pagination_class = GoodsPagination
 
-class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class GoodsListViewSet(CacheResponseMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     # 商品列表页：分页、搜索、过滤、排序
     queryset = Goods.objects.all().order_by('id')
     serializer_class = GoodsSerializer
     pagination_class = GoodsPagination
-    filter_backends = (DjangoFilterBackend,filters.SearchFilter, filters.OrderingFilter)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = GoodsFilter
     search_fields = ['name', 'goods_brief', 'goods_desc']
     ordering_fields = ['sold_num', 'add_time', 'shop_price']
+    throttle_classes = (UserRateThrottle, AnonRateThrottle)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -66,9 +69,7 @@ class BannerViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Banner.objects.all().order_by("index")
     serializer_class = BannerSerializer
 
+
 class IndexCategoryViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = GoodsCategory.objects.filter(is_tab=True, name__in=["生鲜食品", "酒水饮料"])
     serializer_class = IndexCategorySerializer
-
-
-

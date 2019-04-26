@@ -30,7 +30,7 @@
   $.fn.setBreakpoints = function(settings) {
     var options = jQuery.extend({
               distinct: true,
-              breakpoints: new Array(320,480,768,1024)
+              breakpoints: [320,480,768,1024]
             },settings);
 
 
@@ -89,11 +89,11 @@
   
   var enterPhone = function(){
   $('.content-navbar .navbar-brand').html("sm-" + $(window).width());
-  }
+  };
   
   var exitPhone = function(){
   $('.content-navbar .navbar-brand').html("lg-" + $(window).width());
-  }
+  };
   
   $(function(){
   $(window).bind('enterBreakpoint768',function() {
@@ -117,13 +117,13 @@
         } else {
           $(this)[0].className = $(this).data('class-org');
         }
-      })
+      });
       lastMode = mode;
     }
   });
   $('[data-toggle=breakpoint]').each(function(){
     $(this).data('class-org', $(this)[0].className);
-  })
+  });
   $(window).trigger('resize');
   })
 

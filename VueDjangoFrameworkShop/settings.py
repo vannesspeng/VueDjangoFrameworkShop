@@ -38,9 +38,6 @@ AUTHENTICATION_BACKENDS = (
     'users.views.CustomBackend',
 )
 
-
-# Application definition
-AUTH_USER_MODEL = 'users.UserProfile'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -57,8 +54,11 @@ INSTALLED_APPS = [
     'django_filters',
     'xadmin',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
 ]
+
+# Application definition
+AUTH_USER_MODEL = 'users.UserProfile'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     '127.0.0.1:3000'
@@ -102,10 +102,10 @@ WSGI_APPLICATION = 'VueDjangoFrameworkShop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': "vue_shop",
+        'NAME': "myshop",
         'USER': "root",
         'PASSWORD': "root",
-        'HOST': "127.0.0.1",
+        'HOST': "39.108.225.222 ",
         'OPTIONS': { 'init_command': 'SET default_storage_engine=INNODB;' }
     }
 }
@@ -164,6 +164,15 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        # Anon是根据Ip来判断，User是根据token来判断
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '200/day',
+        'user': '500/day'
+    }
 }
 
 
@@ -180,3 +189,13 @@ ali_pub_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/alipay_key_2048.txt')
 
 # 手机号码正则表达式
 REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
